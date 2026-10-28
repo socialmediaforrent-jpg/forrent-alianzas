@@ -106,6 +106,6 @@ if __name__=='__main__':
     t=load('tokens',{}); A=load('asignacion',{})
     if not REMOTE and t.get('admin'):
         with open(os.path.join(BASE,'enlaces.txt'),'w') as f:
-            f.write(f"BASE = https://alianzas.grupoinmobiliarioforrent.com (local http://127.0.0.1:{PORT})\n\nADMIN: BASE/admin/{t['admin']}\n\n")
+            f.write(f"BASE = https://forrent-alianzas.onrender.com (local http://127.0.0.1:{PORT})\n\nADMIN: BASE/admin/{t['admin']}\n\n")
             for a,tk in t.get('asesores',{}).items(): f.write(f"{a} ({len(A.get(a,[]))}): BASE/a/{tk}\n")
     ThreadingHTTPServer(('0.0.0.0',PORT),H).serve_forever()
