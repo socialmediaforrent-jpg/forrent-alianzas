@@ -1,0 +1,12 @@
+oficinas.json
+tokens.json
+asignacion.json
+respuestas.json
+asesoras.json
+enlaces.txt
+*.log
+__pycache__
+inmuebles.json
+asesoras_config.json
+excluir_correos.json
+correo.py
