@@ -3,7 +3,7 @@
 Local: datos en esta carpeta. Render: DATA_DIR + /sync/data y /sync/respuestas (igual que estatus_web)."""
 import json,os,re,hmac,html,threading,datetime,urllib.parse
 from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
-BASE=os.path.dirname(os.path.abspath(__file__)); DATA_DIR=os.environ.get('DATA_DIR'); REMOTE=bool(DATA_DIR)
+BASE=os.path.dirname(os.path.abspath(__file__)); DATA_DIR=os.environ.get('DATA_DIR') or ('/tmp/alianzas_data' if os.environ.get('RENDER') else None); REMOTE=bool(DATA_DIR)
 SYNC_KEY=os.environ.get('SYNC_KEY',''); PORT=int(os.environ.get('PORT',18797)); LOCK=threading.Lock()
 D=DATA_DIR or BASE
 if REMOTE: os.makedirs(D,exist_ok=True)
@@ -103,9 +103,9 @@ class H(BaseHTTPRequestHandler):
         self.send(200,'{"ok":true}','application/json')
     def log_message(self,*a): pass
 if __name__=='__main__':
-    if not REMOTE:
-        t=load('tokens',{}); A=load('asignacion',{})
+    t=load('tokens',{}); A=load('asignacion',{})
+    if not REMOTE and t.get('admin'):
         with open(os.path.join(BASE,'enlaces.txt'),'w') as f:
             f.write(f"BASE = https://alianzas.grupoinmobiliarioforrent.com (local http://127.0.0.1:{PORT})\n\nADMIN: BASE/admin/{t['admin']}\n\n")
-            for a,tk in t['asesores'].items(): f.write(f"{a} ({len(A.get(a,[]))}): BASE/a/{tk}\n")
+            for a,tk in t.get('asesores',{}).items(): f.write(f"{a} ({len(A.get(a,[]))}): BASE/a/{tk}\n")
     ThreadingHTTPServer(('0.0.0.0',PORT),H).serve_forever()
